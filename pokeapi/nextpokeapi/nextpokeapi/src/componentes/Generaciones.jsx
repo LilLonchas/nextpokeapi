@@ -1,7 +1,8 @@
 // components/RandomPokemons.js
+import { notFound } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap"; // Importamos los componentes de Bootstrap
-
+import Head from "next/head"; 
 const RandomPokemons = ({ generation }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,19 +14,19 @@ const RandomPokemons = ({ generation }) => {
     let min, max;
 
     // Determinar el rango de IDs basado en la generación seleccionada
-    if (generation === 1) {
+    if (generation === 0) {
+      // Para generación 0 (aleatorio de todas las generaciones)
       min = 1;
-      max = 151;
+      max = 1010;
     } else if (generation === 2) {
       min = 152;
       max = 251;
-    } else if (generation === 3) {
-      min = 252;
-      max = 386;
-    } else if (generation === 0) {
-      // Para generación 0 (aleatorio de todas las generaciones)
+    } //else if (generation === 3) {
+      //min = 252;
+      //max = 386;} 
+      else if (generation === 1) {
       min = 1;
-      max = 1010;  // Usamos un rango amplio, considerando hasta Pokémon #1010
+      max = 151;  // Usamos un rango amplio, considerando hasta Pokémon #1010
     }
 
     // Generar 1 o 10 IDs aleatorios dentro del rango de la generación seleccionada
@@ -52,6 +53,9 @@ const RandomPokemons = ({ generation }) => {
 
     setPokemonList(pokemonData);
     setLoading(false); // Dejar de mostrar "Cargando"
+    if (notFound) {
+      setLoading(false);
+     }
   };
 
   useEffect(() => {
@@ -70,11 +74,16 @@ const RandomPokemons = ({ generation }) => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <img src="/load-32_256.gif" alt="cargando"></img>;
   }
+  
 
   return (
     <div>
+      <Head>
+  <link rel="icon" href={showModal ? "/descarga.png" : "/default-icon.ico"} />
+</Head>
+
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {pokemonList.map((pokemon) => (
           <div
@@ -107,7 +116,7 @@ const RandomPokemons = ({ generation }) => {
       </div>
 
     
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleCloseModal} >
         <Modal.Header closeButton>
           <Modal.Title>{selectedPokemon?.name} (# {selectedPokemon?.id})</Modal.Title>
         </Modal.Header>
@@ -124,10 +133,15 @@ const RandomPokemons = ({ generation }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Cerrar
-          </Button>
-        </Modal.Footer>
+  <a href="/">
+    <Button variant="secondary">
+      Cerrar
+    </Button>
+  </a>
+  <Button>
+    anterior {}
+  </Button>
+</Modal.Footer>
       </Modal>
     </div>
   );

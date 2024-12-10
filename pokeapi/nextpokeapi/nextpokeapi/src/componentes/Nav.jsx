@@ -5,7 +5,9 @@ const Navbar = ({ setGeneration }) => {
     <nav>
       
       <div className="dropdown show">
+        
       <button type="button" className="btn btn-secondary" onClick={() => setGeneration(0)}>Inicio</button>
+      
         <button
           className="btn btn-secondary dropdown-toggle"
           href="#"
